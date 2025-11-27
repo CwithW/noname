@@ -142,6 +142,11 @@ export const NonameConfig = {
 				const input = this.$refs.input;
 				if (config.name == "联机昵称") {
 					input.innerHTML = config.init || "无名玩家";
+					if(!config.init){
+						input.innerHTML = "无名玩家" + Math.floor(Math.random() * 10000);
+						game.saveConfig("connect_nickname", input.innerHTML);
+						game.saveConfig("connect_nickname", input.innerHTML, "connect");
+					}
 					input.onblur = function () {
 						input.innerHTML = input.innerHTML.replace(/<br>/g, "");
 						if (!input.innerHTML || get.is.banWords(input.innerHTML)) {

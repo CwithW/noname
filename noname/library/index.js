@@ -7231,12 +7231,12 @@ export class Library {
 				},
 				hall_ip: {
 					name: "联机大厅",
-					input: true,
+					input: false,
 					frequent: true,
 				},
 				hall_button: {
 					name: "联机大厅按钮",
-					init: true,
+					init: false,
 					frequent: true,
 					onclick(bool) {
 						game.saveConfig("hall_button", bool, "connect");
@@ -7262,7 +7262,7 @@ export class Library {
 				},
 				read_clipboard: {
 					name: "读取邀请链接",
-					init: true,
+					init: false,
 					frequent: true,
 					intro: "读取剪贴板以解析邀请链接自动加入联机房间",
 				},

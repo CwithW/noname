@@ -280,7 +280,8 @@ function alertForNewServer() {
 		"\n另外，您无论如何选择都可以随时通过点击“联机模式选项-更多-重置受信任的服务器列表”来重置您的选择。"
 	];
 
-	return confirm(tips.join("\n"));
+	// return confirm(tips.join("\n"));
+	return true;
 }
 
 /**

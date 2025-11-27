@@ -9,6 +9,7 @@ export default () => {
 		start() {
 			var directstartmode = lib.config.directstartmode;
 			ui.create.menu(true);
+			var default_multiplayer_address = window.location.origin.replace("https://","wss://").replace("http://","ws://");
 			event.textnode = ui.create.div("", "输入联机地址");
 			var createNode = function () {
 				if (event.created) {
@@ -49,7 +50,7 @@ export default () => {
 				node.style.left = "calc(50% - 210px)";
 				node.style.top = "calc(50% - 20px)";
 				node.style.whiteSpace = "nowrap";
-				node.textContent = lib.config.last_ip || lib.hallURL;
+				node.textContent = lib.config.last_ip || lib.hallURL || default_multiplayer_address;
 				node.contentEditable = true;
 				node.style.webkitUserSelect = "text";
 				node.style.textAlign = "center";

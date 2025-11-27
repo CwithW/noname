@@ -1,0 +1,91 @@
+<html>
+    <head><title>clear all local things</title></head>
+    <body></body>
+    <script>
+        /**
+ * 浏览器数据清理脚本
+ * 功能：清除 LocalStorage, Cookies, SessionStorage, 和 Service Workers
+ */
+
+async function clearAllBrowserData() {
+    console.group("Starting Cleanup Process...");
+
+    // 1. 清除 LocalStorage
+    try {
+        localStorage.clear();
+        console.log("✅ LocalStorage has been cleared.");
+    } catch (e) {
+        console.error("❌ Failed to clear LocalStorage:", e);
+    }
+
+    // 2. 清除 SessionStorage (虽然你没问，但在清理缓存时通常也需要清理这个)
+    try {
+        sessionStorage.clear();
+        console.log("✅ SessionStorage has been cleared.");
+    } catch (e) {
+        console.error("❌ Failed to clear SessionStorage:", e);
+    }
+
+    // 3. 清除 Cookies
+    try {
+        const cookies = document.cookie.split(";");
+        
+        if (document.cookie === "") {
+            console.log("ℹ️ No cookies found to clear.");
+        } else {
+            for (let i = 0; i < cookies.length; i++) {
+                const cookie = cookies[i];
+                const eqPos = cookie.indexOf("=");
+                const name = eqPos > -1 ? cookie.substr(0, eqPos) : cookie;
+                
+                // 通过将过期时间设置为过去的日期来删除 Cookie
+                // 尝试删除根路径和当前路径下的 Cookie
+                document.cookie = name + "=;expires=Thu, 01 Jan 1970 00:00:00 GMT;path=/";
+                document.cookie = name + "=;expires=Thu, 01 Jan 1970 00:00:00 GMT";
+            }
+            console.log(`✅ Cleared ${cookies.length} cookies.`);
+        }
+    } catch (e) {
+        console.error("❌ Failed to clear Cookies:", e);
+    }
+
+    // 4. 注销所有 Service Workers
+    if ('serviceWorker' in navigator) {
+        try {
+            const registrations = await navigator.serviceWorker.getRegistrations();
+            
+            if (registrations.length === 0) {
+                console.log("ℹ️ No Service Workers found.");
+            } else {
+                const unregisterPromises = registrations.map(registration => {
+                    return registration.unregister().then(success => {
+                        if (success) {
+                            console.log(`✅ Service Worker unregistered: ${registration.scope}`);
+                        } else {
+                            console.warn(`⚠️ Failed to unregister Service Worker: ${registration.scope}`);
+                        }
+                    });
+                });
+
+                await Promise.all(unregisterPromises);
+                console.log("✅ All Service Worker unregistration attempts finished.");
+            }
+        } catch (e) {
+            console.error("❌ Error managing Service Workers:", e);
+        }
+    } else {
+        console.log("ℹ️ Service Workers are not supported in this browser.");
+    }
+
+    console.log("🎉 Cleanup Complete!");
+    console.groupEnd();
+    document.body.innerHTML="OK";
+    
+    // 可选：重新加载页面以确保更改生效
+    // window.location.reload();
+}
+
+// 执行函数
+clearAllBrowserData();
+    </script>
+</html>

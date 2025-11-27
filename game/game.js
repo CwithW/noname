@@ -64,7 +64,8 @@
 		// 如果满足以下条件之一，则显示GPL许可协议警告:
 		// 1. 已经初始化过
 		// 2. 用户确认显示GPL许可协议警告
-		if (gameIntialized || confirm(globalText.GPL_ALERT)) {
+		// if (gameIntialized || confirm(globalText.GPL_ALERT)) {
+		if (gameIntialized || true) {
 			// 记录已显示过GPL许可协议警告
 			localStorage.setItem("gplv3_noname_alerted", String(true));
 		} else {

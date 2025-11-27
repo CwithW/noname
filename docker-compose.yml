@@ -1,0 +1,12 @@
+services:
+  noname:
+    image: docker.io/library/libnoname_noname
+    build: .
+    ports:
+      - "127.0.0.1:8100:8089" #http
+      - "127.0.0.1:8101:8080" #ws
+    deploy:
+      resources:
+        limits:
+          memory: 1024M
+          cpus: '1'

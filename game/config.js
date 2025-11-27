@@ -144,7 +144,7 @@ window.config = {
 	customcardpile: {},
 	addedpile: {},
 
-	mode: "identity",
+	mode: "online",
 	mode_config: {
 		global: {
 			player_number: 8,

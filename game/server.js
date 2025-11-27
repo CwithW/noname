@@ -353,6 +353,11 @@
 		}, 60000);
 		ws.on("message", function (message) {
 			if (!clients[this.wsid]) {return;}
+			var rawBuffer = null;
+			if (typeof Buffer !== "undefined" && Buffer.isBuffer(message)) {
+				rawBuffer = message;
+				message = rawBuffer.toString();
+			}
 			if (message == "heartbeat") {
 				this.beat = false;
 			} else if (this.owner) {
