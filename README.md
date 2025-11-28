@@ -1,3 +1,36 @@
+# noname
+
+A fork of libnoname/noname, that adds docker support and some other features.
+
+## notes
+
+you should use caddy to handle https, so you have ws and http on same port. also note that ServiceWorker need https so you must use https.
+
+```
+noname.example.com {
+# 1. 定义 WebSocket 匹配器
+    # 检查 Connection 头包含 "Upgrade" 且 Upgrade 头为 "websocket"
+    @websockets {
+        header Connection *Upgrade*
+        header Upgrade websocket
+    }
+
+    # 2. 处理 WebSocket 请求 -> 转发到 8081
+    handle @websockets {
+        reverse_proxy 127.0.0.1:8101
+    }
+
+    # 3. 处理所有其他请求 (默认 fallback) -> 转发到 8080
+    handle {
+        reverse_proxy 127.0.0.1:8100
+    }
+}
+```
+
+
+# original readme.md
+
+
 noname-server.exe 的源码见以下仓库：
 
 https://github.com/nonameShijian/noname-server
