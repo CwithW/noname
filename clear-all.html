@@ -77,6 +77,45 @@ async function clearAllBrowserData() {
         console.log("ℹ️ Service Workers are not supported in this browser.");
     }
 
+    // 5. [新增] 清除 IndexedDB
+    if ('indexedDB' in window) {
+        try {
+            // indexedDB.databases() 返回所有数据库信息的 Promise (Chrome 72+, Firefox 88+, Safari 14+)
+            if (window.indexedDB.databases) {
+                const dbs = await window.indexedDB.databases();
+                
+                if (dbs.length === 0) {
+                     console.log("ℹ️ No IndexedDB databases found.");
+                } else {
+                    const dbPromises = dbs.map(db => {
+                        return new Promise((resolve, reject) => {
+                            const req = window.indexedDB.deleteDatabase(db.name);
+                            req.onsuccess = () => {
+                                console.log(`✅ IndexedDB deleted: ${db.name}`);
+                                resolve();
+                            };
+                            req.onerror = () => {
+                                console.error(`❌ Failed to delete IndexedDB: ${db.name}`);
+                                resolve(); // 继续执行即使失败
+                            };
+                            req.onblocked = () => {
+                                console.warn(`⚠️ Delete blocked for IndexedDB: ${db.name} (Check if tabs are open)`);
+                                resolve();
+                            };
+                        });
+                    });
+                    
+                    await Promise.all(dbPromises);
+                    console.log("✅ IndexedDB cleanup attempts finished.");
+                }
+            } else {
+                 console.warn("⚠️ browser does not support 'indexedDB.databases()', cannot auto-discover DB names.");
+            }
+        } catch (e) {
+            console.error("❌ Error clearing IndexedDB:", e);
+        }
+    }
+
     console.log("🎉 Cleanup Complete!");
     console.groupEnd();
     document.body.innerHTML="OK";
